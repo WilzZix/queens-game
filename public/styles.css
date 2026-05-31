@@ -145,4 +145,5 @@ body {
   border-radius: 999px;
   cursor: pointer;
   line-height: 1;
+  transition: background 0.2s ease, color 0.2s ease;
 }

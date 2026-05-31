@@ -1,5 +1,6 @@
 const STORAGE_KEY = "queens.theme";
 
+// Mirrors the inline anti-FOUC boot script in index.html — keep the two in sync.
 export function resolveTheme(stored) {
   return stored === "dark" ? "dark" : "light";
 }
