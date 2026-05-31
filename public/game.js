@@ -2,6 +2,7 @@ import { generate } from './generator.js';
 import { solve } from './solver.js';
 import { setupThemeToggle } from './theme.js';
 import { trackGameStart, trackGameWin, trackGameSolve, trackSizeChange } from './analytics.js';
+import { recordOutcome } from './progress.js';
 
 const EMPTY = 0;
 const MARK = 1; // ✕
@@ -160,6 +161,7 @@ function onWin() {
   if (!game.outcomeLogged) {
     game.outcomeLogged = true;
     trackGameWin(game.n, game.seconds * 1000);
+    recordOutcome({ size: game.n, timeMs: game.seconds * 1000, result: 'win' });
   }
 }
 
@@ -203,6 +205,7 @@ function solveAll() {
   winEl.textContent = SOLVED_TEXT;
   game.outcomeLogged = true;
   trackGameSolve(game.n);
+  recordOutcome({ size: game.n, timeMs: game.seconds * 1000, result: 'solve' });
   render();
 }
 
