@@ -1,0 +1,99 @@
+:root {
+  --bg: #f8fafc;
+  --ink: #1e293b;
+  --indigo: #6366f1;
+  --gridline: #cbd5e1;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  width: 100%;
+  max-width: 560px;
+  padding: 20px 16px 40px;
+  text-align: center;
+}
+
+.title { font-size: 32px; margin: 8px 0 16px; }
+
+.sizes { display: flex; gap: 8px; justify-content: center; margin-bottom: 14px; }
+
+.chip {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.chip.active { background: var(--indigo); color: #fff; }
+
+.timer { font-size: 24px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; color: var(--indigo); }
+
+.board-wrap { position: relative; display: inline-block; }
+
+.board {
+  display: grid;
+  gap: 3px;
+  background: var(--gridline);
+  padding: 6px;
+  border-radius: 14px;
+  touch-action: manipulation;
+}
+
+.cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(16px, 6vw, 28px);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.05s ease;
+}
+.cell:active { transform: scale(0.92); }
+.cell.conflict { outline: 3px solid #ef4444; outline-offset: -3px; }
+
+.win-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(99, 102, 241, 0.85);
+  border-radius: 14px;
+}
+.hidden { display: none; }
+
+.panel { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 18px 0 12px; }
+
+.btn {
+  padding: 9px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--indigo);
+  color: #fff;
+}
+.btn.ghost { background: #e2e8f0; color: #334155; }
+.btn.primary { background: #10b981; }
+.btn:disabled { opacity: 0.5; cursor: default; }
+
+.rules { font-size: 13px; color: #64748b; line-height: 1.5; margin-top: 16px; }

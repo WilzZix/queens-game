@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Queens — Logic Puzzle</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <h1 class="title">👑 Queens</h1>
+
+    <div class="sizes" id="sizes">
+      <button class="chip" data-size="7">7×7</button>
+      <button class="chip active" data-size="8">8×8</button>
+      <button class="chip" data-size="9">9×9</button>
+    </div>
+
+    <div class="timer" id="timer">⏱ 00:00</div>
+
+    <div class="board-wrap">
+      <div class="board" id="board"></div>
+      <div class="win-banner hidden" id="win">🎉 G'alaba!</div>
+    </div>
+
+    <div class="panel">
+      <button class="btn ghost" id="undo">↶ Undo</button>
+      <button class="btn ghost" id="clear">✕ Tozalash</button>
+      <button class="btn" id="hint">💡 Hint</button>
+      <button class="btn" id="solve">👑 Yechib ber</button>
+      <button class="btn primary" id="new">🔄 Yangi</button>
+    </div>
+
+    <p class="rules">
+      Har qator, ustun va rangda bitta 👑. Queen'lar bir-biriga tegmasin.
+      Katakni bos: bo'sh → ✕ → 👑 → bo'sh.
+    </p>
+  </main>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>
