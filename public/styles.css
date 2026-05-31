@@ -214,3 +214,56 @@ body {
 
 .auth-msg { font-size: 13px; margin: 2px 0 0; color: var(--conflict); }
 .auth-msg.ok { color: var(--success); }
+.stats-title { font-size: 24px; margin: 8px 0 18px; }
+
+.stats-totals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  background: var(--chip-bg);
+  color: var(--chip-ink);
+  border-radius: 12px;
+  padding: 12px 14px;
+  min-width: 84px;
+}
+.stat-value { font-size: 22px; font-weight: 800; }
+.stat-label { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+
+.stats-persize { display: flex; flex-direction: column; gap: 8px; max-width: 360px; margin: 0 auto 8px; }
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--gridline);
+  border-radius: 10px;
+  font-size: 14px;
+}
+.stat-size { font-weight: 700; }
+.stat-detail { color: var(--rules-ink); }
+
+.stats-subtitle { font-size: 16px; margin: 20px 0 10px; }
+
+.stats-history { display: flex; flex-direction: column; gap: 6px; max-width: 360px; margin: 0 auto; }
+
+.hist-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--btn-ghost-bg);
+  color: var(--btn-ghost-ink);
+  font-size: 13px;
+}
+
+.stats-empty { color: var(--rules-ink); font-size: 14px; }
+
+.back-btn { margin-top: 22px; }
