@@ -41,9 +41,10 @@ body {
 
 .timer { font-size: 24px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; color: var(--indigo); }
 
-.board-wrap { position: relative; display: inline-block; }
+.board-wrap { position: relative; width: 100%; max-width: 480px; margin: 0 auto; }
 
 .board {
+  width: 100%;
   display: grid;
   gap: 3px;
   background: var(--gridline);
