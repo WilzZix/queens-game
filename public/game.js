@@ -1,6 +1,7 @@
 import { generate } from './generator.js';
 import { solve } from './solver.js';
 import { setupThemeToggle } from './theme.js';
+import { trackGameStart, trackGameWin, trackGameSolve, trackSizeChange } from './analytics.js';
 
 const EMPTY = 0;
 const MARK = 1; // ✕
@@ -30,6 +31,7 @@ const game = {
   timerId: null,
   running: false,
   won: false,
+  outcomeLogged: false,
 };
 
 function formatTime(s) {
@@ -76,11 +78,13 @@ function newGame(n) {
   game.history = [];
   game.seconds = 0;
   game.won = false;
+  game.outcomeLogged = false;
   timerEl.textContent = formatTime(0);
   winEl.textContent = WIN_TEXT;
   winEl.classList.add('hidden');
   buildBoard();
   render();
+  trackGameStart(n);
 }
 
 function buildBoard() {
@@ -153,6 +157,10 @@ function onWin() {
   game.won = true;
   stopTimer();
   winEl.classList.remove('hidden');
+  if (!game.outcomeLogged) {
+    game.outcomeLogged = true;
+    trackGameWin(game.n, game.seconds * 1000);
+  }
 }
 
 function undo() {
@@ -193,6 +201,8 @@ function solveAll() {
   for (let r = 0; r < game.n; r++) game.state[r][sol[r]] = QUEEN;
   stopTimer();
   winEl.textContent = SOLVED_TEXT;
+  game.outcomeLogged = true;
+  trackGameSolve(game.n);
   render();
 }
 
@@ -207,7 +217,9 @@ sizesEl.addEventListener('click', (e) => {
   if (!btn) return;
   for (const chip of sizesEl.querySelectorAll('.chip')) chip.classList.remove('active');
   btn.classList.add('active');
-  newGame(Number(btn.dataset.size));
+  const size = Number(btn.dataset.size);
+  trackSizeChange(size);
+  newGame(size);
 });
 
 setupThemeToggle(document.getElementById('themeToggle'));
