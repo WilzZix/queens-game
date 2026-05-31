@@ -10,6 +10,9 @@ const PALETTE = [
   '#a5b4fc', '#f0abfc', '#d6d3d1', '#f9a8d4', '#5eead4',
 ];
 
+const WIN_TEXT = "🎉 G'alaba!";
+const SOLVED_TEXT = '👑 Yechildi';
+
 const boardEl = document.getElementById('board');
 const timerEl = document.getElementById('timer');
 const winEl = document.getElementById('win');
@@ -58,14 +61,22 @@ function glyph(v) {
 function newGame(n) {
   stopTimer();
   game.n = n;
-  const { regions, solution } = generate(n);
-  game.regions = regions;
-  game.solution = solution;
+  let puzzle;
+  try {
+    puzzle = generate(n);
+  } catch (err) {
+    winEl.textContent = '⚠️ Jumboq yaratilmadi, qayta urining';
+    winEl.classList.remove('hidden');
+    return;
+  }
+  game.regions = puzzle.regions;
+  game.solution = puzzle.solution;
   game.state = Array.from({ length: n }, () => new Array(n).fill(EMPTY));
   game.history = [];
   game.seconds = 0;
   game.won = false;
   timerEl.textContent = formatTime(0);
+  winEl.textContent = WIN_TEXT;
   winEl.classList.add('hidden');
   buildBoard();
   render();
@@ -173,10 +184,14 @@ function hint() {
 }
 
 function solveAll() {
+  if (game.won) return;
   const sol = solve(game.regions);
   if (!sol) return;
   game.state = Array.from({ length: game.n }, () => new Array(game.n).fill(EMPTY));
+  game.history = [];
   for (let r = 0; r < game.n; r++) game.state[r][sol[r]] = QUEEN;
+  stopTimer();
+  winEl.textContent = SOLVED_TEXT;
   render();
 }
 
