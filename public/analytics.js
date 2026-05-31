@@ -33,3 +33,5 @@ export const trackGameStart = (size) => track("game_start", { size });
 export const trackGameWin = (size, timeMs) => track("game_win", { size, time_ms: timeMs });
 export const trackGameSolve = (size) => track("game_solve", { size });
 export const trackSizeChange = (size) => track("size_change", { size });
+export const trackLogin = (method) => track("login", { method });
+export const trackSignup = (method) => track("signup", { method });
