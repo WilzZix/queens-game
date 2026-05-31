@@ -27,3 +27,20 @@ export function getApp() {
   }
   return appPromise;
 }
+
+let authPromise = null;
+
+// Lazily loads firebase-auth and the Auth instance exactly once.
+// Resolves to { auth, sdk } where sdk is the firebase-auth module namespace
+// (signInWithPopup, GoogleAuthProvider, onAuthStateChanged, ...). Rejects only
+// if the SDK cannot be loaded; callers handle that.
+export function getAuth() {
+  if (!authPromise) {
+    authPromise = (async () => {
+      const app = await getApp();
+      const sdk = await import(sdkUrl("auth"));
+      return { auth: sdk.getAuth(app), sdk };
+    })();
+  }
+  return authPromise;
+}
