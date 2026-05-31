@@ -3,6 +3,31 @@
   --ink: #1e293b;
   --indigo: #6366f1;
   --gridline: #cbd5e1;
+  --chip-bg: #eef2ff;
+  --chip-ink: #4338ca;
+  --btn-ghost-bg: #e2e8f0;
+  --btn-ghost-ink: #334155;
+  --rules-ink: #64748b;
+  --success: #10b981;
+  --conflict: #ef4444;
+  --on-accent: #ffffff;
+  --banner-bg: rgba(99, 102, 241, 0.85);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0f172a;
+  --ink: #e2e8f0;
+  --indigo: #6366f1;
+  --gridline: #334155;
+  --chip-bg: #1e293b;
+  --chip-ink: #c7d2fe;
+  --btn-ghost-bg: #334155;
+  --btn-ghost-ink: #e2e8f0;
+  --rules-ink: #94a3b8;
+  --success: #10b981;
+  --conflict: #ef4444;
+  --on-accent: #ffffff;
+  --banner-bg: rgba(99, 102, 241, 0.9);
 }
 
 * { box-sizing: border-box; }
@@ -14,6 +39,7 @@ body {
   color: var(--ink);
   display: flex;
   justify-content: center;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .app {
@@ -31,13 +57,13 @@ body {
   padding: 6px 16px;
   border: none;
   border-radius: 999px;
-  background: #eef2ff;
-  color: #4338ca;
+  background: var(--chip-bg);
+  color: var(--chip-ink);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
 }
-.chip.active { background: var(--indigo); color: #fff; }
+.chip.active { background: var(--indigo); color: var(--on-accent); }
 
 .timer { font-size: 24px; font-weight: 700; letter-spacing: 1px; margin-bottom: 12px; color: var(--indigo); }
 
@@ -65,7 +91,7 @@ body {
   transition: transform 0.05s ease;
 }
 .cell:active { transform: scale(0.92); }
-.cell.conflict { outline: 3px solid #ef4444; outline-offset: -3px; }
+.cell.conflict { outline: 3px solid var(--conflict); outline-offset: -3px; }
 
 .win-banner {
   position: absolute;
@@ -75,8 +101,8 @@ body {
   justify-content: center;
   font-size: 28px;
   font-weight: 800;
-  color: #fff;
-  background: rgba(99, 102, 241, 0.85);
+  color: var(--on-accent);
+  background: var(--banner-bg);
   border-radius: 14px;
 }
 .hidden { display: none; }
@@ -91,10 +117,10 @@ body {
   font-weight: 600;
   cursor: pointer;
   background: var(--indigo);
-  color: #fff;
+  color: var(--on-accent);
 }
-.btn.ghost { background: #e2e8f0; color: #334155; }
-.btn.primary { background: #10b981; }
+.btn.ghost { background: var(--btn-ghost-bg); color: var(--btn-ghost-ink); }
+.btn.primary { background: var(--success); }
 .btn:disabled { opacity: 0.5; cursor: default; }
 
-.rules { font-size: 13px; color: #64748b; line-height: 1.5; margin-top: 16px; }
+.rules { font-size: 13px; color: var(--rules-ink); line-height: 1.5; margin-top: 16px; }
