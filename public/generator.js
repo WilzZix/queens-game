@@ -56,8 +56,10 @@ function growRegions(n, solution) {
   return regions;
 }
 
+const MAX_ATTEMPTS = 20000;
+
 export function generate(n) {
-  for (let attempt = 0; attempt < 2000; attempt++) {
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
     const solution = placeSolution(n);
     if (!solution) continue;
     const regions = growRegions(n, solution);
