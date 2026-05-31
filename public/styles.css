@@ -159,6 +159,7 @@ body {
   color: var(--rules-ink);
   margin-bottom: 6px;
 }
+.user-bar.hidden { display: none; }
 .user-email { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 70%; }
 
 .auth-sub { font-size: 15px; color: var(--rules-ink); margin: 8px 0 18px; }
