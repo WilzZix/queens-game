@@ -268,3 +268,15 @@ body {
 .stats-empty { color: var(--rules-ink); font-size: 14px; }
 
 .back-btn { margin-top: 22px; }
+
+.boot-error {
+  max-width: 460px;
+  margin: 12px auto;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #fde2e2;
+  color: #7a1212;
+  font-size: 13px;
+  text-align: center;
+  word-break: break-word;
+}

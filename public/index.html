@@ -13,6 +13,40 @@
       document.documentElement.dataset.theme = "light";
     }
   </script>
+  <script>
+    // Safety net: surface any boot error on the page and never leave a blank screen.
+    (function () {
+      function reveal() {
+        var ids = ["view-auth", "view-game", "view-stats"];
+        var anyVisible = ids.some(function (id) {
+          var e = document.getElementById(id);
+          return e && !e.classList.contains("hidden");
+        });
+        if (!anyVisible) {
+          var a = document.getElementById("view-auth");
+          if (a) a.classList.remove("hidden");
+        }
+      }
+      function showError(msg) {
+        var box = document.getElementById("bootError");
+        if (box) {
+          box.textContent = "⚠ " + msg;
+          box.classList.remove("hidden");
+        }
+        reveal();
+      }
+      window.addEventListener("error", function (e) {
+        showError((e.message || "Xatolik") + (e.filename ? "  @ " + e.filename.split("/").pop() : ""));
+      });
+      window.addEventListener("unhandledrejection", function (e) {
+        var r = e.reason;
+        showError("Promise: " + ((r && (r.code || r.message)) || r));
+      });
+      window.addEventListener("DOMContentLoaded", function () {
+        setTimeout(reveal, 4000);
+      });
+    })();
+  </script>
 </head>
 <body>
   <main class="app">
@@ -20,6 +54,8 @@
       <h1 class="title">👑 Queens</h1>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">🌙</button>
     </div>
+
+    <div id="bootError" class="boot-error hidden"></div>
 
     <div class="user-bar hidden" id="userBar">
       <span class="user-email" id="userEmail"></span>
