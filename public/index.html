@@ -21,31 +21,54 @@
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">🌙</button>
     </div>
 
-    <div class="sizes" id="sizes">
-      <button class="chip" data-size="7">7×7</button>
-      <button class="chip active" data-size="8">8×8</button>
-      <button class="chip" data-size="9">9×9</button>
+    <div class="user-bar hidden" id="userBar">
+      <span class="user-email" id="userEmail"></span>
+      <button class="link-btn" id="signOutBtn" type="button">Chiqish</button>
     </div>
 
-    <div class="timer" id="timer">⏱ 00:00</div>
+    <section id="view-auth" class="view hidden">
+      <p class="auth-sub">Hisobingizga kiring</p>
+      <button class="btn google-btn" id="googleBtn" type="button">Google bilan kirish</button>
+      <div class="auth-divider">yoki</div>
+      <form class="auth-form" id="authForm">
+        <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email" required />
+        <input class="auth-input" id="authPassword" type="password" placeholder="Parol" autocomplete="current-password" required />
+        <p class="auth-msg hidden" id="authMsg"></p>
+        <button class="btn primary auth-submit" id="authSubmit" type="submit">Kirish</button>
+      </form>
+      <div class="auth-links">
+        <button class="link-btn" id="toggleMode" type="button">Hisob yo'qmi? Ro'yxatdan o'ting</button>
+        <button class="link-btn" id="resetBtn" type="button">Parolni unutdingizmi?</button>
+      </div>
+    </section>
 
-    <div class="board-wrap">
-      <div class="board" id="board"></div>
-      <div class="win-banner hidden" id="win">🎉 G'alaba!</div>
-    </div>
+    <section id="view-game" class="view">
+      <div class="sizes" id="sizes">
+        <button class="chip" data-size="7">7×7</button>
+        <button class="chip active" data-size="8">8×8</button>
+        <button class="chip" data-size="9">9×9</button>
+      </div>
 
-    <div class="panel">
-      <button class="btn ghost" id="undo">↶ Undo</button>
-      <button class="btn ghost" id="clear">✕ Tozalash</button>
-      <button class="btn" id="hint">💡 Hint</button>
-      <button class="btn" id="solve">👑 Yechib ber</button>
-      <button class="btn primary" id="new">🔄 Yangi</button>
-    </div>
+      <div class="timer" id="timer">⏱ 00:00</div>
 
-    <p class="rules">
-      Har qator, ustun va rangda bitta 👑. Queen'lar bir-biriga tegmasin.
-      Katakni bos: bo'sh → ✕ → 👑 → bo'sh.
-    </p>
+      <div class="board-wrap">
+        <div class="board" id="board"></div>
+        <div class="win-banner hidden" id="win">🎉 G'alaba!</div>
+      </div>
+
+      <div class="panel">
+        <button class="btn ghost" id="undo">↶ Undo</button>
+        <button class="btn ghost" id="clear">✕ Tozalash</button>
+        <button class="btn" id="hint">💡 Hint</button>
+        <button class="btn" id="solve">👑 Yechib ber</button>
+        <button class="btn primary" id="new">🔄 Yangi</button>
+      </div>
+
+      <p class="rules">
+        Har qator, ustun va rangda bitta 👑. Queen'lar bir-biriga tegmasin.
+        Katakni bos: bo'sh → ✕ → 👑 → bo'sh.
+      </p>
+    </section>
   </main>
 
   <script type="module" src="game.js"></script>
