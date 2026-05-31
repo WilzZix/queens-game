@@ -5,10 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Queens — Logic Puzzle</title>
   <link rel="stylesheet" href="styles.css" />
+  <script>
+    try {
+      var t = localStorage.getItem("queens.theme");
+      document.documentElement.dataset.theme = t === "dark" ? "dark" : "light";
+    } catch (e) {
+      document.documentElement.dataset.theme = "light";
+    }
+  </script>
 </head>
 <body>
   <main class="app">
-    <h1 class="title">👑 Queens</h1>
+    <div class="header">
+      <h1 class="title">👑 Queens</h1>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">🌙</button>
+    </div>
 
     <div class="sizes" id="sizes">
       <button class="chip" data-size="7">7×7</button>

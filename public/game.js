@@ -1,5 +1,6 @@
 import { generate } from './generator.js';
 import { solve } from './solver.js';
+import { setupThemeToggle } from './theme.js';
 
 const EMPTY = 0;
 const MARK = 1; // ✕
@@ -208,5 +209,7 @@ sizesEl.addEventListener('click', (e) => {
   btn.classList.add('active');
   newGame(Number(btn.dataset.size));
 });
+
+setupThemeToggle(document.getElementById('themeToggle'));
 
 newGame(8);
