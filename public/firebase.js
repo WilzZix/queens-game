@@ -44,3 +44,20 @@ export function getAuth() {
   }
   return authPromise;
 }
+
+let dbPromise = null;
+
+// Lazily loads firebase-firestore and the Firestore instance exactly once.
+// Resolves to { db, sdk } where sdk is the firebase-firestore module namespace
+// (doc, getDoc, setDoc, collection, addDoc, query, orderBy, limit, serverTimestamp, ...).
+// Rejects only if the SDK cannot be loaded; callers handle that.
+export function getDb() {
+  if (!dbPromise) {
+    dbPromise = (async () => {
+      const app = await getApp();
+      const sdk = await import(sdkUrl("firestore"));
+      return { db: sdk.getFirestore(app), sdk };
+    })();
+  }
+  return dbPromise;
+}
