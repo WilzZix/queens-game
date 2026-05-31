@@ -44,3 +44,20 @@ test('solve returns null when no solution exists', () => {
   assert.strictEqual(solve(regions), null);
   assert.strictEqual(countSolutions(regions, 2), 0);
 });
+
+test('solve enforces region constraint and finds the unique solution', () => {
+  // 4×4 board. Without regions, the only column+adjacency-valid solutions are
+  // [1,3,0,2] and [2,0,3,1]. The region layout below puts both queens of the
+  // second solution — cells (0,2) and (1,0) — into region 2, so region
+  // uniqueness eliminates it, leaving [1,3,0,2] as the unique solution.
+  const board = [
+    [0, 0, 2, 0],
+    [2, 0, 0, 1],
+    [2, 0, 0, 0],
+    [0, 0, 3, 0],
+  ];
+  const sol = solve(board);
+  assert.deepStrictEqual(sol, [1, 3, 0, 2]);
+  assert.ok(validate(board, sol), 'solution must satisfy all rules');
+  assert.strictEqual(countSolutions(board, 2), 1, 'must be the unique solution');
+});
