@@ -1,16 +1,16 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { authErrorMessage, validateCredentials } from "../public/auth-errors.js";
+import { authErrorKey, validateCredentials } from "../public/auth-errors.js";
 
-test("authErrorMessage maps known codes to friendly text", () => {
-  assert.equal(authErrorMessage("auth/wrong-password"), "Parol noto'g'ri.");
-  assert.equal(authErrorMessage("auth/email-already-in-use"), "Bu email allaqachon ro'yxatdan o'tgan.");
-  assert.equal(authErrorMessage("auth/weak-password"), "Parol juda zaif (kamida 6 ta belgi).");
+test("authErrorKey returns the code itself for known codes", () => {
+  assert.equal(authErrorKey("auth/wrong-password"), "auth/wrong-password");
+  assert.equal(authErrorKey("auth/email-already-in-use"), "auth/email-already-in-use");
+  assert.equal(authErrorKey("auth/weak-password"), "auth/weak-password");
 });
 
-test("authErrorMessage falls back for unknown codes", () => {
-  assert.equal(authErrorMessage("auth/something-new"), "Xatolik yuz berdi. Qayta urinib ko'ring.");
-  assert.equal(authErrorMessage(undefined), "Xatolik yuz berdi. Qayta urinib ko'ring.");
+test("authErrorKey falls back to err.generic for unknown codes", () => {
+  assert.equal(authErrorKey("auth/something-new"), "err.generic");
+  assert.equal(authErrorKey(undefined), "err.generic");
 });
 
 test("validateCredentials accepts a valid email + 6+ char password", () => {
@@ -18,9 +18,9 @@ test("validateCredentials accepts a valid email + 6+ char password", () => {
 });
 
 test("validateCredentials rejects a bad email", () => {
-  assert.equal(validateCredentials("not-an-email", "secret"), "Email manzil noto'g'ri.");
+  assert.equal(validateCredentials("not-an-email", "secret"), "err.invalidEmail");
 });
 
 test("validateCredentials rejects a short password", () => {
-  assert.equal(validateCredentials("a@b.com", "123"), "Parol kamida 6 ta belgidan iborat bo'lishi kerak.");
+  assert.equal(validateCredentials("a@b.com", "123"), "err.weakPasswordInput");
 });

@@ -3,6 +3,7 @@ import { solve } from './solver.js';
 import { setupThemeToggle } from './theme.js';
 import { trackGameStart, trackGameWin, trackGameSolve, trackSizeChange } from './analytics.js';
 import { recordOutcome } from './progress.js';
+import { t } from './i18n.js';
 
 const EMPTY = 0;
 const MARK = 1; // ✕
@@ -12,9 +13,6 @@ const PALETTE = [
   '#fca5a5', '#fdba74', '#fde047', '#86efac', '#67e8f9',
   '#a5b4fc', '#f0abfc', '#d6d3d1', '#f9a8d4', '#5eead4',
 ];
-
-const WIN_TEXT = "🎉 G'alaba!";
-const SOLVED_TEXT = '👑 Yechildi';
 
 const boardEl = document.getElementById('board');
 const timerEl = document.getElementById('timer');
@@ -33,6 +31,7 @@ const game = {
   running: false,
   won: false,
   outcomeLogged: false,
+  bannerKey: 'game.win',
 };
 
 function formatTime(s) {
@@ -69,7 +68,8 @@ function newGame(n) {
   try {
     puzzle = generate(n);
   } catch (err) {
-    winEl.textContent = '⚠️ Jumboq yaratilmadi, qayta urining';
+    game.bannerKey = 'game.genError';
+    winEl.textContent = t('game.genError');
     winEl.classList.remove('hidden');
     return;
   }
@@ -80,12 +80,14 @@ function newGame(n) {
   game.seconds = 0;
   game.won = false;
   game.outcomeLogged = false;
+  game.bannerKey = 'game.win';
   timerEl.textContent = formatTime(0);
-  winEl.textContent = WIN_TEXT;
+  winEl.textContent = t('game.win');
   winEl.classList.add('hidden');
   buildBoard();
   render();
   trackGameStart(n);
+  window.dispatchEvent(new CustomEvent('queens:newgame'));
 }
 
 function buildBoard() {
@@ -160,8 +162,12 @@ function onWin() {
   winEl.classList.remove('hidden');
   if (!game.outcomeLogged) {
     game.outcomeLogged = true;
-    trackGameWin(game.n, game.seconds * 1000);
-    recordOutcome({ size: game.n, timeMs: game.seconds * 1000, result: 'win' });
+    const timeMs = game.seconds * 1000;
+    trackGameWin(game.n, timeMs);
+    recordOutcome({ size: game.n, timeMs, result: 'win' });
+    window.dispatchEvent(new CustomEvent('queens:outcome', {
+      detail: { size: game.n, timeMs, result: 'win' },
+    }));
   }
 }
 
@@ -202,10 +208,15 @@ function solveAll() {
   game.history = [];
   for (let r = 0; r < game.n; r++) game.state[r][sol[r]] = QUEEN;
   stopTimer();
-  winEl.textContent = SOLVED_TEXT;
+  game.bannerKey = 'game.solved';
+  winEl.textContent = t('game.solved');
   game.outcomeLogged = true;
+  const timeMs = game.seconds * 1000;
   trackGameSolve(game.n);
-  recordOutcome({ size: game.n, timeMs: game.seconds * 1000, result: 'solve' });
+  recordOutcome({ size: game.n, timeMs, result: 'solve' });
+  window.dispatchEvent(new CustomEvent('queens:outcome', {
+    detail: { size: game.n, timeMs, result: 'solve' },
+  }));
   render();
 }
 
@@ -226,5 +237,9 @@ sizesEl.addEventListener('click', (e) => {
 });
 
 setupThemeToggle(document.getElementById('themeToggle'));
+
+window.addEventListener('queens:langchange', () => {
+  winEl.textContent = t(game.bannerKey);
+});
 
 newGame(8);

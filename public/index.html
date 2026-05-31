@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uz">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,6 +14,14 @@
     }
   </script>
   <script>
+    try {
+      var l = localStorage.getItem("queens.lang");
+      document.documentElement.lang = l === "uz" || l === "ru" ? l : "en";
+    } catch (e) {
+      document.documentElement.lang = "en";
+    }
+  </script>
+  <script>
     // Safety net: surface any boot error on the page and never leave a blank screen.
     (function () {
       function reveal() {
@@ -23,8 +31,8 @@
           return e && !e.classList.contains("hidden");
         });
         if (!anyVisible) {
-          var a = document.getElementById("view-auth");
-          if (a) a.classList.remove("hidden");
+          var g = document.getElementById("view-game");
+          if (g) g.classList.remove("hidden");
         }
       }
       function showError(msg) {
@@ -36,7 +44,7 @@
         reveal();
       }
       window.addEventListener("error", function (e) {
-        showError((e.message || "Xatolik") + (e.filename ? "  @ " + e.filename.split("/").pop() : ""));
+        showError((e.message || "Error") + (e.filename ? "  @ " + e.filename.split("/").pop() : ""));
       });
       window.addEventListener("unhandledrejection", function (e) {
         var r = e.reason;
@@ -51,31 +59,38 @@
 <body>
   <main class="app">
     <div class="header">
+      <div class="lang-switch" id="langSwitch">
+        <button class="lang-btn" type="button" data-lang="en">EN</button>
+        <button class="lang-btn" type="button" data-lang="uz">UZ</button>
+        <button class="lang-btn" type="button" data-lang="ru">RU</button>
+      </div>
       <h1 class="title">👑 Queens</h1>
       <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">🌙</button>
     </div>
 
     <div id="bootError" class="boot-error hidden"></div>
 
-    <div class="user-bar hidden" id="userBar">
+    <div class="user-bar" id="userBar">
       <span class="user-email" id="userEmail"></span>
-      <button class="link-btn" id="statsBtn" type="button">Statistika</button>
-      <button class="link-btn" id="signOutBtn" type="button">Chiqish</button>
+      <button class="link-btn hidden" id="statsBtn" type="button" data-i18n="nav.stats">Stats</button>
+      <button class="link-btn hidden" id="signOutBtn" type="button" data-i18n="nav.signOut">Sign out</button>
+      <button class="link-btn hidden" id="loginBtn" type="button" data-i18n="nav.login">Sign in</button>
     </div>
 
     <section id="view-auth" class="view hidden">
-      <p class="auth-sub">Hisobingizga kiring</p>
-      <button class="btn google-btn" id="googleBtn" type="button">Google bilan kirish</button>
-      <div class="auth-divider">yoki</div>
+      <p class="auth-sub" data-i18n="auth.subtitle">Sign in to your account</p>
+      <button class="btn google-btn" id="googleBtn" type="button" data-i18n="auth.google">Sign in with Google</button>
+      <div class="auth-divider" data-i18n="auth.or">or</div>
       <form class="auth-form" id="authForm">
-        <input class="auth-input" id="authEmail" type="email" placeholder="Email" autocomplete="email" required />
-        <input class="auth-input" id="authPassword" type="password" placeholder="Parol" autocomplete="current-password" required />
+        <input class="auth-input" id="authEmail" type="email" data-i18n-ph="auth.email" placeholder="Email" autocomplete="email" required />
+        <input class="auth-input" id="authPassword" type="password" data-i18n-ph="auth.password" placeholder="Password" autocomplete="current-password" required />
         <p class="auth-msg hidden" id="authMsg"></p>
-        <button class="btn primary auth-submit" id="authSubmit" type="submit">Kirish</button>
+        <button class="btn primary auth-submit" id="authSubmit" type="submit" data-i18n="auth.login">Sign in</button>
       </form>
       <div class="auth-links">
-        <button class="link-btn" id="toggleMode" type="button">Hisob yo'qmi? Ro'yxatdan o'ting</button>
-        <button class="link-btn" id="resetBtn" type="button">Parolni unutdingizmi?</button>
+        <button class="link-btn" id="toggleMode" type="button" data-i18n="auth.toSignup">No account? Sign up</button>
+        <button class="link-btn" id="resetBtn" type="button" data-i18n="auth.forgot">Forgot password?</button>
+        <button class="link-btn" id="backToGameFromAuth" type="button" data-i18n="auth.back">← Back to game</button>
       </div>
     </section>
 
@@ -90,27 +105,31 @@
 
       <div class="board-wrap">
         <div class="board" id="board"></div>
-        <div class="win-banner hidden" id="win">🎉 G'alaba!</div>
+        <div class="win-banner hidden" id="win" data-i18n="game.win">🎉 You win!</div>
+      </div>
+
+      <div class="save-prompt hidden" id="savePrompt">
+        <span data-i18n="save.prompt">Sign in to save your result</span>
+        <button class="btn primary" id="savePromptBtn" type="button" data-i18n="save.login">Sign in to save</button>
       </div>
 
       <div class="panel">
-        <button class="btn ghost" id="undo">↶ Undo</button>
-        <button class="btn ghost" id="clear">✕ Tozalash</button>
-        <button class="btn" id="hint">💡 Hint</button>
-        <button class="btn" id="solve">👑 Yechib ber</button>
-        <button class="btn primary" id="new">🔄 Yangi</button>
+        <button class="btn ghost" id="undo" data-i18n="game.undo">↶ Undo</button>
+        <button class="btn ghost" id="clear" data-i18n="game.clear">✕ Clear</button>
+        <button class="btn" id="hint" data-i18n="game.hint">💡 Hint</button>
+        <button class="btn" id="solve" data-i18n="game.solve">👑 Solve</button>
+        <button class="btn primary" id="new" data-i18n="game.new">🔄 New</button>
       </div>
 
-      <p class="rules">
-        Har qator, ustun va rangda bitta 👑. Queen'lar bir-biriga tegmasin.
-        Katakni bos: bo'sh → ✕ → 👑 → bo'sh.
+      <p class="rules" data-i18n="game.rules">
+        One 👑 in each row, column and color. Queens must not touch. Tap a cell: empty → ✕ → 👑 → empty.
       </p>
     </section>
 
     <section id="view-stats" class="view hidden">
-      <h2 class="stats-title">📊 Statistika</h2>
+      <h2 class="stats-title" data-i18n="stats.title">📊 Stats</h2>
       <div id="statsBody" class="stats-body"></div>
-      <button class="btn ghost back-btn" id="backToGameBtn" type="button">← O'yinga qaytish</button>
+      <button class="btn ghost back-btn" id="backToGameBtn" type="button" data-i18n="auth.back">← Back to game</button>
     </section>
   </main>
 

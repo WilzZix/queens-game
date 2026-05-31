@@ -1,6 +1,7 @@
 import { getAuth } from "./firebase.js";
-import { authErrorMessage, validateCredentials } from "./auth-errors.js";
+import { authErrorKey, validateCredentials } from "./auth-errors.js";
 import { trackLogin, trackSignup } from "./analytics.js";
+import { t } from "./i18n.js";
 
 let mode = "login"; // "login" | "signup"
 
@@ -17,9 +18,8 @@ function showMessage(text, ok = false) {
 }
 
 function applyMode() {
-  el("authSubmit").textContent = mode === "login" ? "Kirish" : "Ro'yxatdan o'tish";
-  el("toggleMode").textContent =
-    mode === "login" ? "Hisob yo'qmi? Ro'yxatdan o'ting" : "Hisobingiz bormi? Kiring";
+  el("authSubmit").textContent = mode === "login" ? t("auth.login") : t("auth.signup");
+  el("toggleMode").textContent = mode === "login" ? t("auth.toSignup") : t("auth.toLogin");
   el("authPassword").setAttribute(
     "autocomplete",
     mode === "login" ? "current-password" : "new-password",
@@ -33,7 +33,7 @@ async function handleEmailSubmit(event) {
   const password = el("authPassword").value;
   const invalid = validateCredentials(email, password);
   if (invalid) {
-    showMessage(invalid);
+    showMessage(t(invalid));
     return;
   }
   const submit = el("authSubmit");
@@ -48,13 +48,13 @@ async function handleEmailSubmit(event) {
       trackSignup("password");
       try {
         await sdk.sendEmailVerification(cred.user);
-        showMessage("Tasdiqlash xati emailingizga yuborildi.", true);
+        showMessage(t("auth.verifySent"), true);
       } catch {
         /* verification email is best-effort; sign-in already succeeded */
       }
     }
   } catch (err) {
-    showMessage(authErrorMessage(err && err.code));
+    showMessage(t(authErrorKey(err && err.code)));
   } finally {
     submit.disabled = false;
   }
@@ -68,22 +68,22 @@ async function handleGoogle() {
     await sdk.signInWithPopup(auth, provider);
     trackLogin("google");
   } catch (err) {
-    showMessage(authErrorMessage(err && err.code));
+    showMessage(t(authErrorKey(err && err.code)));
   }
 }
 
 async function handleReset() {
   const email = el("authEmail").value.trim();
   if (!email || !email.includes("@")) {
-    showMessage("Parolni tiklash uchun email kiriting.");
+    showMessage(t("auth.resetNeedEmail"));
     return;
   }
   try {
     const { auth, sdk } = await getAuth();
     await sdk.sendPasswordResetEmail(auth, email);
-    showMessage("Parolni tiklash xati yuborildi.", true);
+    showMessage(t("auth.resetSent"), true);
   } catch (err) {
-    showMessage(authErrorMessage(err && err.code));
+    showMessage(t(authErrorKey(err && err.code)));
   }
 }
 
@@ -96,6 +96,7 @@ function toggleMode() {
 export function mountAuthUi() {
   if (!el("authForm")) return;
   applyMode();
+  window.addEventListener("queens:langchange", applyMode);
   el("authForm").addEventListener("submit", handleEmailSubmit);
   el("googleBtn").addEventListener("click", handleGoogle);
   el("resetBtn").addEventListener("click", handleReset);
